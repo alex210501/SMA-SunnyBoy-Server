@@ -32,9 +32,11 @@ class SmaApi {
         if ('result' in result) {
             this.isConnected = true;
             this.sid = result.result.sid;
-        }
 
-        console.log(this.sid);
+            console.log(`Logged In with SID: ${this.sid}`);
+        } else {
+            console.error(`Cannot log in with error ${result.err}`);
+        }
         
         return response.data;
     }
@@ -55,8 +57,11 @@ class SmaApi {
 
         if ('result' in result) {
             this.isConnected = result.result.isLogin;
+
+            console.log("Disconnected from the SMA server");
         }
-        console.log(response.data);
+        
+        return response.data;
     }
 }
 

@@ -1,6 +1,10 @@
 const express = require('express');
-const router = express.Router();
+const smaController = require('../controllers/sma-controller');
 
-router.get('/', (req, res) => res.end("Hello"));
+const router = express.Router();
+const sma = new smaController();
+
+router.post('/login', (req, res) => sma.logIn(req, res));
+router.post('/logout', (req, res) => sma.logOut(req, res));
 
 module.exports = router;
