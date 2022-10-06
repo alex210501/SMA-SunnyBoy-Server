@@ -58,11 +58,76 @@ class SmaApi {
         if ('result' in result) {
             this.isConnected = result.result.isLogin;
 
-            console.log("Disconnected from the SMA server");
+            console.log("Disconnected from the SMA server"); 
         }
         
-        return response.data;
+        return result;
+    }
+
+    /*
+        Get the values passed from keys.
+
+        @param {array} keysList - Keys to get the values
+    */
+    async getValues(keysList) {
+        if (!this.isConnected) {
+            await this.logIn();
+        }
+
+        const url = `${smaHost}/dyn/getValues.json`;
+        const options = {
+            params: {
+                sid: this.sid
+            }
+        };
+        const data = {
+            destDev: [],
+            keys: keysList
+        };
+
+        let response = await axios.post(url, data, options);
+        let result = response.data;
+
+        // If a result is received, remove the super key '012F-7309B431'
+        if ('result' in result) {
+            let superKey = Object.keys(result.result)[0];
+            
+            return result.result[superKey];
+        }
+
+        return result;
+    }
+
+    /*
+        Get all the values from the SMA
+    */
+    async getAllValues() {
+        if (!this.isConnected) {
+            await this.logIn();
+        }
+
+        const url = `${smaHost}/dyn/getAllOnlValues.json`;
+        const options = {
+            params: {
+                sid: this.sid
+            }
+        };
+        const data = {
+            destDev: [],
+        };
+
+        let response = await axios.post(url, data, options);
+        let result = response.data;
+
+        // If a result is received, remove the super key '012F-7309B431'
+        if ('result' in result) {
+            let superKey = Object.keys(result.result)[0];
+
+            return result.result[superKey];
+        }
+
+        return result;
     }
 }
 
-module.exports = SmaApi;
+module.exports = new SmaApi();
