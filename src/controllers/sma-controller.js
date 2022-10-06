@@ -1,21 +1,29 @@
 const smaApi = require('../models/sma-api');
+const smaConfig = require('../models/sma-config');
 
 class SmaController {
-    constructor() {
-        this.smaApi = new smaApi();
-    }
-
     logIn(req, res) {
-        this.smaApi.logIn().then((response) => {
+        smaApi.logIn().then((response) => {
             res.json(response);
         });
     }
 
     logOut(req, res) {
-        this.smaApi.logOut().then((response) => {
+        smaApi.logOut().then((response) => {
             res.json(response);
+        });
+    }
+
+    getValues(req, res) {
+        res.json(smaConfig);
+    }
+
+    updateAllValues() {
+        smaApi.getAllValues().then((response) => {
+            console.log(response);
+            smaConfig.updateByCode(response);
         });
     }
 }
 
-module.exports = SmaController;
+module.exports = new SmaController();
