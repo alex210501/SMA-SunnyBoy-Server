@@ -1,0 +1,67 @@
+{
+    "6100_40263F00": {
+                "value": 0,
+                "unit": "W",
+                "key": "power"
+    },
+    "6400_00262200": {
+        "value": 0,
+        "unit": "Wh",
+        "key": "enery_today"
+    },
+    "6400_00260100": {
+        "value": 0,
+        "unit": "Wh",
+        "key": "energy_total"
+    },
+    "6100_40464000": {
+        "value": 0,
+        "unit": "W",
+        "key": "L1_power"
+    },
+    "6100_00464800": {
+        "value": 0,
+        "unit": "cV",
+        "key": "L1_voltage"
+    },
+    "6100_40465300": {
+        "value": 0,
+        "unit": "mA",
+        "key": "L1_current"
+    },
+    "6100_00465700": {
+        "value": 0,
+        "unit": "cH",
+        "key": "frequency"
+    },
+    "6380_40251E00": {
+        "value": 0,
+        "unit": "W",
+        "key": "dc_power"
+    },
+    "6380_40451F00": {
+        "value": 0,
+        "unit": "cV",
+        "key": "dc_voltage"
+    },
+    "6380_40452100": {
+        "value": 0,
+        "unit": "mA",
+        "key": "dc_current"
+    },
+    "6400_00462E00": {
+        "value": 0,
+        "unit": "s",
+        "key": "operating_time"
+    },
+    "6180_104A9A00": {
+        "value": 0,
+        "unit": "",
+        "key": "ethernet_ip"
+    },
+    "6180_104AB700": {
+        "value": 0,
+        "unit": "",
+        "key": "wlan_ip"
+    }
+}
