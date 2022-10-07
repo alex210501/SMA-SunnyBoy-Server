@@ -4,7 +4,6 @@ const axios = require('axios');
 // IP address of the SMA server
 const smaHost = 'http://192.168.1.150';
 
-
 /*
     Class that manage the communication with the SMA sunny boy server.
 */
@@ -46,11 +45,7 @@ class SmaApi {
      */
     async logOut() {
         const url = `${smaHost}/dyn/logout.json`;
-        const options = {
-            params: {
-                sid: this.sid
-            }
-        }
+        const options = this.#getOptionRequest();
 
         let response = await axios.post(url, {}, options);
         let result = response.data;
@@ -75,11 +70,7 @@ class SmaApi {
         }
 
         const url = `${smaHost}/dyn/getValues.json`;
-        const options = {
-            params: {
-                sid: this.sid
-            }
-        };
+        const options = this.#getOptionRequest();
         const data = {
             destDev: [],
             keys: keysList
@@ -107,11 +98,7 @@ class SmaApi {
         }
 
         const url = `${smaHost}/dyn/getAllOnlValues.json`;
-        const options = {
-            params: {
-                sid: this.sid
-            }
-        };
+        const options = this.#getOptionRequest();
         const data = {
             destDev: [],
         };
@@ -140,11 +127,7 @@ class SmaApi {
         }
 
         const url = `${smaHost}/dyn/getTime.json`;
-        const options = {
-            params: {
-                sid: this.sid
-            }
-        };
+        const options = this.#getOptionRequest();
         const data = {
             destDev: [],
         };
@@ -160,6 +143,19 @@ class SmaApi {
         }
 
         return result;
+    }
+
+    /*
+        Return the options to pass to the POST request
+
+        @return Object with the options to send into the request
+    */
+    #getOptionRequest() {
+        return {
+            params: {
+                sid: this.sid
+            }
+        };
     }
 }
 
