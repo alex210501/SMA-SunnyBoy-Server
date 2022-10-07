@@ -122,7 +122,40 @@ class SmaApi {
         // If a result is received, remove the super key '012F-7309B431'
         if ('result' in result) {
             let superKey = Object.keys(result.result)[0];
+            
+            return result.result[superKey];
+        }
 
+        return result;
+    }
+
+    /*
+        Get the local time of the SMA
+
+        @return Local time
+    */
+    async getLocalTime() {
+        if (!this.isConnected) {
+            await this.logIn();
+        }
+
+        const url = `${smaHost}/dyn/getTime.json`;
+        const options = {
+            params: {
+                sid: this.sid
+            }
+        };
+        const data = {
+            destDev: [],
+        };
+
+        let response = await axios.post(url, data, options);
+        let result = response.data;
+
+        // If a result is received, remove the super key '012F-7309B431'
+        if ('result' in result) {
+            let superKey = Object.keys(result.result)[0];
+            
             return result.result[superKey];
         }
 

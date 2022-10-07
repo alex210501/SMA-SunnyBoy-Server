@@ -4,10 +4,21 @@ const fs = require('fs');
 const configPath = 'src/configs/sma-keys.json';
 
 /*
+    Keep in memory the time configuration of the SMA device
+*/
+class SmaTimeConfiguration {
+    constructor() {
+        this.currentTime = 0;
+        this.offset = 0;
+    }
+}
+
+/*
     Keep in memory the configurations of a SMA device
 */
 class SmaConfig {
     constructor() {
+        this.time = new SmaTimeConfiguration();
         this.configs = SmaConfig.readConfigKeys();
         console.log(this.configs);
     }
@@ -38,6 +49,11 @@ class SmaConfig {
         });
     }
 
+    setTime(time, offset) {
+        this.time.currentTime = time;
+        this.time.offset = offset;
+    }
+
     /*
         Override the toJSON function.
         @return String JSON with the data to send to the client.
@@ -51,6 +67,9 @@ class SmaConfig {
                 unit: this.configs[keyCode].unit
             };
         });
+
+        // Add the time values into the json to return
+        json.time = this.time;
 
         return json;
     }

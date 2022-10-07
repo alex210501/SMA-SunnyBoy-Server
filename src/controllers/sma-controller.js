@@ -19,6 +19,11 @@ class SmaController {
     }
 
     updateAllValues() {
+        smaApi.getLocalTime().then((response) => {
+            console.log(response);
+            smaConfig.setTime(response.tm ?? 0, response.ofs ?? 0);
+        });
+
         smaApi.getAllValues().then((response) => {
             console.log(response);
             smaConfig.updateByCode(response);
