@@ -1,7 +1,17 @@
+const path = require('node:path'); 
+const https = require('https');
+const fs = require('fs');
+
 const express = require('express'); 
+const session = require('express-session');
+
 const router = require('./src/routes/routes.js');
 const smaController = require('./src/controllers/sma-controller');
-const session = require('express-session');
+
+const options = {
+    key: fs.readFileSync(path.join('ssl', 'key.pem'), 'utf-8'),
+    cert: fs.readFileSync(path.join('ssl', 'cert.pem'), 'utf-8')
+};
 
 const app = express();
 const port = 5000;
@@ -13,7 +23,7 @@ app.use(express.json());
 
 app.use('/', router);
 
-app.listen(port, () => {
+https.createServer(options, app).listen(port, () => {
     console.log(`Now listening on port ${port}`); 
 });
 
