@@ -1,20 +1,59 @@
+const jwt = require('jsonwebtoken');
+
 const smaApi = require('../models/sma-api');
 const smaConfig = require('../models/sma-config');
 
+const invalidTokenMessage = 'Invalid token !';
+
 class SmaController {
     logIn(req, res) {
-        smaApi.logIn().then((response) => {
-            res.json(response);
+        // If token is registed, it mean that you're connected
+        if (req.session.token) {
+            res.status(401).json({
+                error: 'Already connected !'
+            });
+            return;
+        }
+
+        jwt.sign({ session: req.session }, 'secretkey', (err, token) => {
+            req.session.token = token;
+            console.log(req.session);
+            res.json({ token });
         });
     }
 
     logOut(req, res) {
-        smaApi.logOut().then((response) => {
-            res.json(response);
+        if (!this.#checkToken(req)) {
+            res.status(403).json({
+                error: invalidTokenMessage
+            });
+
+            return;
+        }
+
+        const token = this.#getToken(req.header('authorization'));
+
+        jwt.verify(token, 'secretkey', (err, authData) => {
+            if (err) {
+                res.status(403).json({
+                    error: invalidTokenMessage
+                });
+            }
         });
+
+        req.session.destroy();
+        res.sendStatus(200);
     }
 
     getValues(req, res) {
+        if (!this.#checkToken(req)) {
+            res.status(403).json({
+                error: invalidTokenMessage
+            });
+
+            return;
+        }
+        
         res.json(smaConfig);
     }
 
@@ -28,6 +67,25 @@ class SmaController {
             console.log(response);
             smaConfig.updateByCode(response);
         });
+    }
+
+    #getToken(authorized) {
+        if (authorized === undefined) {
+            return '';
+        }
+
+        // Check if it's a bearer token and take the result after 'Bearer'
+        if (authorized.startsWith('Bearer')) {
+            return authorized.split(' ')[1];
+        }
+
+        return authorized;
+    }
+
+    #checkToken(request) {
+        const token = this.#getToken(request.header('authorization'));
+
+        return request.session.token == token;
     }
 }
 

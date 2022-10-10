@@ -1,11 +1,13 @@
 const express = require('express'); 
 const router = require('./src/routes/routes.js');
 const smaController = require('./src/controllers/sma-controller');
+const session = require('express-session');
 
 const app = express();
 const port = 5000;
 const UpdateValueInterval = 3000; // 3 s
 
+app.use(session({ secret: 'ssshhhhh', saveUninitialized: true, resave: true }));
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 
