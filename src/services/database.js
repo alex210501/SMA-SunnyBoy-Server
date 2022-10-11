@@ -12,6 +12,7 @@ class Database {
     #mongodb;
     #database;
     #uri;
+    #databaseName;
 
     constructor() {
         this.#uri = this.#getUriFromFile();
@@ -25,7 +26,7 @@ class Database {
         try {
             await this.#mongodb.connect();
 
-            this.#database = this.#mongodb.db('sma-users');
+            this.#database = this.#mongodb.db(this.#databaseName);
         } catch(e) {
             throw 'Failed to connect to the database !';
         }
@@ -85,7 +86,7 @@ class Database {
         const password = jsonData.password ?? "";
         const host = jsonData.host ?? "";
         const port = jsonData.port ?? 8000;
-        const databaseName = jsonData.databaseName ?? "";
+        this.#databaseName = jsonData.databaseName ?? "";
         
         return `mongodb://${username}:${password}@${host}:${port}/?maxPoolSize=20&w=majority`;
     }
