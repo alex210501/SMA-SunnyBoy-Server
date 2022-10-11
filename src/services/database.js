@@ -92,7 +92,11 @@ class Database {
     }
 }
 
-module.exports = new Database();
+// Connect to the database and export it
+const database = new Database();
+database.connect();
+
+module.exports = database;
 
 if (!module.parent) {
     const db = new Database;

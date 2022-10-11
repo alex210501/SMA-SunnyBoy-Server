@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken');
 
 const smaApi = require('../models/sma-api');
 const smaConfig = require('../models/sma-config');
+const userValidation = require('../utils/user-validation');
 
 const invalidTokenMessage = 'Invalid token !';
 
@@ -15,10 +16,21 @@ class SmaController {
             return;
         }
 
-        jwt.sign({ session: req.session }, 'secretkey', (err, token) => {
-            req.session.token = token;
-            console.log(req.session);
-            res.json({ token });
+        userValidation.checkUserPassword(req.body.username, req.body.password).then((result) => {
+            console.log(result);
+            if (!result) {
+                res.status(401).json({
+                    error: 'Bad username and password combination !'
+                });
+                return;
+            }
+
+            console.log(req.header('authorization'));
+            jwt.sign({ session: req.session }, 'secretkey', (err, token) => {
+                req.session.token = token;
+                console.log(req.session);
+                res.json({ token });
+            });
         });
     }
 
