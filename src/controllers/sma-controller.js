@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 
+const crypto = require('crypto')
+;
 const smaApi = require('../models/sma-api');
 const smaConfig = require('../models/sma-config');
 const userValidation = require('../utils/user-validation');
@@ -8,14 +10,6 @@ const invalidTokenMessage = 'Invalid token !';
 
 class SmaController {
     logIn(req, res) {
-        // If token is registed, it mean that you're connected
-        if (req.session.token) {
-            res.status(401).json({
-                error: 'Already connected !'
-            });
-            return;
-        }
-
         userValidation.checkUserPassword(req.body.username, req.body.password).then((result) => {
             console.log(result);
             if (!result) {
@@ -26,11 +20,11 @@ class SmaController {
             }
 
             console.log(req.header('authorization'));
-            jwt.sign({ session: req.session }, 'secretkey', (err, token) => {
-                req.session.token = token;
-                console.log(req.session);
-                res.json({ token });
-            });
+            if (!req.session.token) {
+                req.session.token = crypto.randomBytes(64).toString('hex');
+            }
+            console.log(req.session.token);
+        res.json({ token: req.session.token });
         });
     }
 
