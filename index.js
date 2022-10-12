@@ -15,9 +15,12 @@ const options = {
 
 const app = express();
 const port = 5000;
+const expiresTime = 30 * 60 * 1000;  // 30 minutes
 const UpdateValueInterval = 3000; // 3 s
 
-app.use(session({ secret: 'ssshhhhh', saveUninitialized: true, resave: true }));
+app.use(session({ secret: 'ssshhhhh', saveUninitialized: true, resave: true , cookie: {
+    expires: expiresTime
+}}));
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 

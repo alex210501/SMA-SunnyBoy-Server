@@ -1,7 +1,4 @@
-const jwt = require('jsonwebtoken');
-
-const crypto = require('crypto')
-;
+const crypto = require('crypto');
 const smaApi = require('../models/sma-api');
 const smaConfig = require('../models/sma-config');
 const userValidation = require('../utils/user-validation');
