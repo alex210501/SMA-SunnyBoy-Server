@@ -36,14 +36,6 @@ class SmaController {
 
         const token = this.#getToken(req.header('authorization'));
 
-        jwt.verify(token, 'secretkey', (err, authData) => {
-            if (err) {
-                res.status(403).json({
-                    error: invalidTokenMessage
-                });
-            }
-        });
-
         req.session.destroy();
         res.sendStatus(200);
     }
