@@ -1,0 +1,7 @@
+{
+    "username": "database-username",
+    "password": "database-password",
+    "host": "<ip-address> or hostname",
+    "port": "<port> (default: 27017)",
+    "databaseName": "database-name"
+}
