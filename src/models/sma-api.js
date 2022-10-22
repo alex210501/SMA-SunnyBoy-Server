@@ -1,26 +1,39 @@
 // Module used to make HTTP request
 const axios = require('axios');
+const fs = require('fs');
 
-// IP address of the SMA server
-const smaHost = 'http://192.168.1.150';
+// Path to the configuration file
+const configPath = 'src/configs/sma-configs.json';
+
+// Default values
+const defaultHost = 'http://localhost';
+const defaultPort = 80;
+const defaultRight = 'usr';
+const defaultPassword = '1234';
 
 /*
     Class that manage the communication with the SMA sunny boy server.
 */
 class SmaApi {
+    #uri;
+    #right;
+    #password;
+
     constructor() {
         this.sid = '';
         this.isConnected = false;
+
+        this.#getConfigFromFile();
     }
 
     /*
         Login to the SMA server.
     */
     async logIn () {
-        const url = `${smaHost}/dyn/login.json`;
+        const url = `${this.#uri}/dyn/login.json`;
         const body = {
-                right: 'usr',
-                pass: 'Lucialej1021'
+                right: this.#right,
+                pass: this.#password
         };
 
         // Send the POST request and get the data
@@ -44,7 +57,7 @@ class SmaApi {
         Logout from the SMA server.
      */
     async logOut() {
-        const url = `${smaHost}/dyn/logout.json`;
+        const url = `${this.#uri}/dyn/logout.json`;
         const options = this.#getOptionRequest();
 
         let response = await axios.post(url, {}, options);
@@ -69,7 +82,7 @@ class SmaApi {
             await this.logIn();
         }
 
-        const url = `${smaHost}/dyn/getValues.json`;
+        const url = `${this.#uri}/dyn/getValues.json`;
         const options = this.#getOptionRequest();
         const data = {
             destDev: [],
@@ -97,7 +110,7 @@ class SmaApi {
             await this.logIn();
         }
 
-        const url = `${smaHost}/dyn/getAllOnlValues.json`;
+        const url = `${this.#uri}/dyn/getAllOnlValues.json`;
         const options = this.#getOptionRequest();
         const data = {
             destDev: [],
@@ -126,7 +139,7 @@ class SmaApi {
             await this.logIn();
         }
 
-        const url = `${smaHost}/dyn/getTime.json`;
+        const url = `${this.#uri}/dyn/getTime.json`;
         const options = this.#getOptionRequest();
         const data = {
             destDev: [],
@@ -156,6 +169,21 @@ class SmaApi {
                 sid: this.sid
             }
         };
+    }
+
+    /*
+        Get the configurations of the server from the file
+    */
+    #getConfigFromFile() {
+        const fileData = fs.readFileSync(configPath, { encoding: 'utf-8' });
+        const jsonData = JSON.parse(fileData);
+        const host = jsonData.host ?? defaultHost;
+        const port = jsonData.port ?? defaultPort;
+
+        this.#uri = `${host}:${port}`;
+        this.#right = jsonData.right ?? defaultRight;
+        this.#password = jsonData.password ?? defaultPassword;
+        console.log(this);
     }
 }
 
