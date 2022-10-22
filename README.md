@@ -97,10 +97,10 @@ The API uses SSL certificates so you have to create a certificate and a private 
 To generate a certificate and a private key, use the following command.
 
 ```shell
-openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -sha256 -days 365
+$ openssl req -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout key.pem -out cert.pem
 ```
 
-Now you have two files: `key.pem` and `cert.pem`. Put them in the `src/ssl/` folder.
+Now you have two files: `key.pem` and `cert.pem`. Create a `ssl/` folder and put them in it.
 
 <!-- Installation -->
 ### Installation
