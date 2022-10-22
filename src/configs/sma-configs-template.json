@@ -1,0 +1,6 @@
+{
+    "host": "<ip-address> or hostname",
+    "port": <port>,
+    "right": "usr",
+    "password": "password of the SMA device"
+}
